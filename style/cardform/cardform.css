@@ -1,0 +1,289 @@
+/* ============================================================
+   UNIVERSAL CARD FORM â€” cardform.css
+   Clean, modern card form with CSS-variable theming.
+   Inspired by Halyk Bank design. Works with cardform.js
+   ============================================================ */
+
+/* ---------- CSS Variables (defaults â€” override per-service) ---------- */
+:root {
+  --cf-accent: #1867c1;
+  --cf-accent-hover: #1458a8;
+  --cf-accent-active: #0f4a8f;
+  --cf-bg: #f5f5f5;
+  --cf-card-bg: #fff;
+  --cf-text: #1a1a1a;
+  --cf-text-secondary: #8c8c8c;
+  --cf-input-bg: #fafafa;
+  --cf-input-bg-focus: #fff;
+  --cf-input-border: #d9d9d9;
+  --cf-header-bg: var(--cf-accent);
+  --cf-header-text: #fff;
+  --cf-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --cf-radius: 12px;
+  --cf-radius-input: 10px;
+}
+
+/* ---------- Reset & Base (scoped to cardform only) ---------- */
+.cf-card-form { 
+  box-sizing: border-box; 
+  line-height: 1.5; 
+  -webkit-text-size-adjust: 100%; 
+  margin: 0; 
+  padding: 0; 
+}
+.cf-card-form * { box-sizing: inherit; }
+body.cf-body, .cf-card-form, .cf-card-form * {
+  font-family: var(--cf-font);
+  font-size: 14px;
+  color: var(--cf-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+body.cf-body {
+  background: var(--cf-bg);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+.cf-card-form img { display: block; max-width: 100%; height: auto }
+.cf-card-form button, .cf-card-form input { font: inherit; color: inherit }
+.cf-card-form a { color: inherit; text-decoration: none }
+
+/* ---------- Header ---------- */
+.cf-header {
+  position: sticky; top: 0; z-index: 50;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,.12);
+}
+.cf-header-inner {
+  max-width: 480px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+}
+.cf-header-logo { height: 24px; width: auto }
+.cf-header-title { font-size: 16px; font-weight: 600; color: #1a1a1a }
+.cf-header-logos { display: flex; align-items: center; gap: 4px }
+.cf-header-logos img { height: 24px; width: auto }
+.cf-header-back {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 500; color: var(--cf-text-secondary);
+  cursor: pointer; background: none; border: none; padding: 0;
+}
+.cf-header-back svg { width: 14px; height: 14px }
+
+/* ---------- Page Container ---------- */
+.cf-page {
+  padding-top: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 20px;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* ---------- Order Bar (colored header with amount) ---------- */
+.cf-order-bar {
+  background: var(--cf-header-bg);
+  padding: 16px 20px;
+  color: var(--cf-header-text);
+}
+.cf-order-bar-title {
+  font-size: 13px; font-weight: 500; opacity: .8; margin-bottom: 4px;
+}
+.cf-order-bar-amount {
+  font-size: 26px; font-weight: 700; letter-spacing: -.02em;
+}
+.cf-order-bar-id {
+  font-size: 12px; font-weight: 400; opacity: .65; margin-top: 4px;
+}
+
+/* ---------- Card Form Container ---------- */
+.cf-card-form {
+  background: var(--cf-card-bg);
+  margin: 16px 0;
+  border-radius: 16px;
+  padding: 24px 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+.cf-card-form-title {
+  font-size: 16px; font-weight: 700; margin-bottom: 6px;
+}
+.cf-card-form-sub {
+  font-size: 12px; color: var(--cf-text-secondary); margin-bottom: 20px;
+}
+
+/* ---------- Form Group ---------- */
+.cf-form-group { margin-bottom: 16px }
+.cf-form-label {
+  font-size: 12px; font-weight: 600; color: #666;
+  margin-bottom: 6px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+/* ---------- Card Brand Icons ---------- */
+.cf-card-icons { display: flex; gap: 4px; align-items: center }
+.cf-card-icons img { height: 20px; width: auto }
+
+/* ---------- Unified Card Input Row ---------- */
+.cf-card-unified {
+  display: flex; align-items: center;
+  border: 1.5px solid var(--cf-input-border);
+  border-radius: var(--cf-radius-input);
+  background: var(--cf-input-bg);
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.cf-card-unified:focus-within {
+  border-color: var(--cf-accent);
+  background: var(--cf-input-bg-focus);
+}
+.cf-card-unified input {
+  border: none; outline: none; background: transparent;
+  font-size: 15px; font-weight: 500; color: var(--cf-text);
+  padding: 13px 0;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-text-fill-color: var(--cf-text);
+}
+.cf-card-unified input:focus {
+  color: var(--cf-text);
+  -webkit-text-fill-color: var(--cf-text);
+}
+.cf-card-unified input::placeholder { color: #bbb; font-weight: 400 }
+
+/* Number input */
+.cf-card-unified .cf-num-input {
+  flex: 1; min-width: 0;
+  padding-left: 14px; padding-right: 8px;
+  transition: flex .4s ease;
+}
+.cf-card-unified.collapsed .cf-num-input {
+  flex: 0 0 110px; min-width: 110px;
+}
+
+/* Separator */
+.cf-card-unified .cf-sep {
+  width: 1px; height: 24px;
+  background: #e0e0e0; flex-shrink: 0;
+}
+
+/* Expiry input */
+.cf-card-unified .cf-exp-input {
+  width: 0; padding: 13px 0; opacity: 0;
+  transition: width .35s ease, opacity .3s ease, padding .35s ease;
+  overflow: hidden; text-align: center; flex-shrink: 0;
+}
+.cf-card-unified.collapsed .cf-exp-input {
+  width: 70px; padding: 13px 8px; opacity: 1;
+}
+
+/* CVV input */
+.cf-card-unified .cf-cvv-input {
+  width: 0; padding: 13px 0; opacity: 0;
+  transition: width .35s ease, opacity .3s ease, padding .35s ease;
+  overflow: hidden; text-align: center; flex-shrink: 0;
+}
+.cf-card-unified.collapsed.show-cvv .cf-cvv-input {
+  width: 56px; padding: 13px 14px 13px 8px; opacity: 1;
+}
+
+/* CVV separator */
+.cf-card-unified .cf-sep-cvv { opacity: 0; transition: opacity .3s ease }
+.cf-card-unified.collapsed.show-cvv .cf-sep-cvv { opacity: 1 }
+
+/* ---------- Text Input (for holder etc.) ---------- */
+.cf-form-input {
+  width: 100%;
+  font-size: 15px; font-weight: 500; color: var(--cf-text);
+  border: 1.5px solid var(--cf-input-border);
+  border-radius: var(--cf-radius-input);
+  padding: 13px 14px;
+  background: var(--cf-input-bg);
+  outline: none;
+  transition: border-color .2s;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-text-fill-color: var(--cf-text);
+}
+.cf-form-input:focus {
+  border-color: var(--cf-accent);
+  background: var(--cf-input-bg-focus);
+  color: var(--cf-text);
+  -webkit-text-fill-color: var(--cf-text);
+}
+.cf-form-input::placeholder { color: #bbb; font-weight: 400 }
+
+/* Holder row reveal animation */
+#holderRow { animation: cfFadeSlideIn .35s ease-out }
+@keyframes cfFadeSlideIn {
+  from { opacity: 0; transform: translateY(-8px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+
+/* ---------- Primary Button ---------- */
+.cf-btn-primary {
+  width: 100%; height: 50px;
+  background: var(--cf-accent);
+  color: #fff; border: none;
+  border-radius: var(--cf-radius);
+  font-size: 15px; font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+  letter-spacing: .02em;
+}
+.cf-btn-primary:hover  { background: var(--cf-accent-hover) }
+.cf-btn-primary:active { background: var(--cf-accent-active) }
+.cf-btn-primary:disabled { background: #c5c5c5; cursor: default }
+
+/* ---------- Secure Line ---------- */
+.cf-secure-line {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; margin-top: 16px;
+}
+.cf-secure-line svg { width: 14px; height: 14px; color: var(--cf-text-secondary) }
+.cf-secure-line span { font-size: 11px; color: var(--cf-text-secondary); font-weight: 500 }
+
+/* ---------- Page Footer ---------- */
+.cf-page-footer { text-align: center; padding: 20px 16px 30px }
+.cf-page-footer-text { font-size: 11px; color: #bbb }
+
+/* ---------- Desktop Adaptive ---------- */
+@media (min-width: 768px) {
+  body.cf-body { background: #f2f2f2; }
+
+  .cf-header {
+    position: relative;
+    max-width: 480px;
+    margin: 32px auto 0;
+    border-radius: 0;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+
+  .cf-page {
+    padding-top: 0;
+    max-width: 480px;
+    margin: 0 auto 32px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+    border-radius: 0;
+    background: var(--cf-bg);
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  .cf-order-bar {
+    border-radius: 0;
+  }
+
+  .cf-card-form {
+    box-shadow: none;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 480px) {
+  .cf-header-inner { padding: 10px 12px }
+  .cf-page { padding-left: 12px; padding-right: 12px }
+  .cf-card-form { padding: 20px 16px }
+}

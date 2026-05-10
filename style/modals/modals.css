@@ -1,0 +1,1348 @@
+/* ============================================================
+   UNIVERSAL MODAL SYSTEM â€” modals.css
+   Bottom-sheet modals for card processing pages.
+   Override CSS variables on :root or .modal-overlay for theming.
+   ============================================================ */
+
+:root {
+  --modal-accent: #1867c1;
+  --modal-accent-rgb: 24, 103, 193;
+  --modal-accent-hover: #1459a8;
+  --modal-accent-active: #104a8f;
+  --modal-bg: #fff;
+  --modal-text: #1a1a1a;
+  --modal-text-secondary: #666;
+  --modal-text-muted: #8c8c8c;
+  --modal-border: #d9d9d9;
+  --modal-input-bg: #fafafa;
+  --modal-input-focus-bg: #fff;
+  --modal-error: #d32f2f;
+  --modal-orange: #f5a623;
+  --modal-blue: #1976d2;
+  --modal-radius: 24px;
+  --modal-btn-radius: 12px;
+  --modal-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.ms-overlay, .ms-sheet, .ms-body {
+  font-family: var(--modal-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* === OVERLAY === */
+.ms-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10200;
+  align-items: stretch;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .35s ease-out;
+}
+.ms-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+/* === FULLSCREEN SHEET (with header offset) === */
+.ms-sheet {
+  width: 100%;
+  max-width: 100%;
+  background: var(--modal-bg);
+  border-radius: 0;
+  padding: 0;
+  margin-top: 70px; /* Offset for site header/logo */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(30px);
+  opacity: 0;
+  transition: transform .4s cubic-bezier(.25,.46,.45,.94), opacity .35s ease-out;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Optional decorative background - can be customized */
+.ms-sheet::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(24, 103, 193, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(24, 103, 193, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ms-overlay.active .ms-sheet {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.ms-handle {
+  display: none;
+}
+
+.ms-body {
+  padding: 32px 32px 40px;
+  max-width: 420px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* === ICON === */
+.ms-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  transition: transform .3s ease;
+}
+.ms-icon:hover {
+  transform: scale(1.05);
+}
+.ms-icon.green  { background: #e6f5ef; }
+.ms-icon.green svg  { color: var(--modal-accent); }
+.ms-icon.orange { background: #fff3e0; }
+.ms-icon.orange svg { color: var(--modal-orange); }
+.ms-icon.red    { background: #fde8e8; }
+.ms-icon.red svg    { color: var(--modal-error); }
+.ms-icon.blue   { background: #e3f2fd; }
+.ms-icon.blue svg   { color: var(--modal-blue); }
+
+/* === TYPOGRAPHY === */
+.ms-title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 10px;
+  color: var(--modal-text);
+  letter-spacing: -0.02em;
+}
+.ms-text {
+  font-size: 14px;
+  color: var(--modal-text-secondary);
+  text-align: center;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.ms-amount {
+  font-size: 14px;
+  color: var(--modal-text-muted);
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+  padding: 10px 20px;
+  background: var(--modal-input-bg);
+  border-radius: 8px;
+  display: inline-block;
+  width: 100%;
+}
+
+/* === INPUT === */
+.ms-input {
+  width: 100%;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 10px;
+  border: 2px solid var(--modal-border);
+  border-radius: var(--modal-btn-radius);
+  padding: 16px;
+  background: var(--modal-input-bg);
+  outline: none;
+  transition: border-color .25s, box-shadow .25s, background .25s;
+  color: var(--modal-text);
+  -webkit-text-fill-color: var(--modal-text);
+  box-sizing: border-box;
+}
+.ms-input:focus {
+  color: var(--modal-text);
+  -webkit-text-fill-color: var(--modal-text);
+  border-color: var(--modal-accent);
+  background: var(--modal-input-focus-bg);
+  box-shadow: 0 0 0 4px rgba(24, 103, 193, 0.1);
+}
+.ms-input::placeholder {
+  letter-spacing: 2px;
+  font-weight: 400;
+  font-size: 14px;
+  color: #bbb;
+}
+
+/* === BUTTON === */
+.ms-btn {
+  width: 100%;
+  height: 54px;
+  background: linear-gradient(135deg, var(--modal-accent) 0%, var(--modal-accent-hover) 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--modal-btn-radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: transform .2s, box-shadow .2s, background .2s;
+  font-family: inherit;
+  box-shadow: 0 4px 15px rgba(24, 103, 193, 0.25);
+}
+.ms-btn:hover { 
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(24, 103, 193, 0.35);
+}
+.ms-btn:active { 
+  transform: translateY(0);
+  background: var(--modal-accent-active); 
+}
+.ms-btn:disabled { 
+  background: #c5c5c5; 
+  cursor: default;
+  box-shadow: none;
+  transform: none;
+}
+
+/* === ERROR HINT === */
+.ms-error-hint {
+  font-size: 12px;
+  color: var(--modal-error);
+  text-align: center;
+  margin-top: 8px;
+  display: none;
+}
+
+/* === DATE SEGMENTS (birthday) === */
+.ms-date-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  border: 1.5px solid var(--modal-border);
+  border-radius: var(--modal-btn-radius);
+  background: var(--modal-input-bg);
+  padding: 4px 8px;
+  transition: border-color .2s;
+}
+.ms-date-group:focus-within {
+  border-color: var(--modal-accent);
+  background: var(--modal-input-focus-bg);
+}
+.ms-date-seg {
+  width: 48px;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 2px;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 10px 2px;
+  color: var(--modal-text);
+  -webkit-text-fill-color: var(--modal-text);
+}
+.ms-date-seg:focus {
+  color: var(--modal-text);
+  -webkit-text-fill-color: var(--modal-text);
+}
+.ms-date-seg-year {
+  width: 72px;
+}
+.ms-date-seg::placeholder {
+  font-weight: 400;
+  font-size: 13px;
+  color: #bbb;
+  letter-spacing: 1px;
+}
+.ms-date-dot {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--modal-accent, #1867c1);
+  user-select: none;
+  padding: 0 2px;
+}
+
+/* === SPINNER === */
+.ms-spinner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+}
+.ms-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3.5px solid #e8e8e8;
+  border-top-color: var(--modal-accent);
+  border-radius: 50%;
+  animation: ms-spin .9s linear infinite;
+}
+@keyframes ms-spin { to { transform: rotate(360deg); } }
+
+.ms-spinner-text {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+}
+.ms-spinner-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 280px;
+}
+/* === RESPONSIVE ADJUSTMENTS === */
+@media (max-width: 480px) {
+  .ms-sheet {
+    margin-top: 56px; /* Smaller header offset on mobile */
+  }
+  .ms-body {
+    padding: 24px 20px 32px;
+  }
+  .ms-title {
+    font-size: 20px;
+  }
+  .ms-icon {
+    width: 56px;
+    height: 56px;
+  }
+  .ms-input {
+    font-size: 18px;
+    letter-spacing: 8px;
+    padding: 14px;
+  }
+  .ms-btn {
+    height: 50px;
+    font-size: 15px;
+  }
+}
+
+/* === CUSTOM DECORATIONS (for future use) === */
+
+/* === INFO CARD (balance explanation) === */
+.ms-info-card {
+  background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);
+  border: 1px solid rgba(24, 103, 193, 0.12);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+.ms-info-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--modal-accent);
+  font-size: 14px;
+  font-weight: 600;
+}
+.ms-info-card-header svg {
+  flex-shrink: 0;
+}
+.ms-info-card-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--modal-text-secondary);
+}
+
+/* === STEPS (balance instructions) === */
+.ms-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.ms-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  position: relative;
+}
+.ms-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 38px;
+  bottom: -2px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--modal-accent) 0%, rgba(24, 103, 193, 0.1) 100%);
+  border-radius: 1px;
+}
+.ms-step-num {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--modal-accent) 0%, var(--modal-accent-hover) 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(24, 103, 193, 0.25);
+}
+.ms-step-text {
+  font-size: 13px;
+  color: var(--modal-text);
+  line-height: 1.5;
+  padding-top: 5px;
+}
+
+/* === FORMAT HINT (example under input) === */
+.ms-format-hint {
+  font-size: 12px;
+  color: var(--modal-text-muted);
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-style: italic;
+}
+
+/* === SECURE BADGE (bottom of modal) === */
+.ms-secure-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 12px;
+  color: var(--modal-text-muted);
+}
+.ms-secure-badge svg {
+  color: var(--modal-accent);
+  flex-shrink: 0;
+}
+
+/* === RESPONSIVE for new elements === */
+@media (max-width: 480px) {
+  .ms-info-card {
+    padding: 12px 14px;
+  }
+  .ms-info-card-text {
+    font-size: 12px;
+  }
+  .ms-step-num {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    font-size: 12px;
+  }
+  .ms-step:not(:last-child)::after {
+    left: 12px;
+    top: 34px;
+  }
+  .ms-step-text {
+    font-size: 12px;
+    padding-top: 3px;
+  }
+}
+
+.ms-sheet.theme-gradient::before {
+  background: linear-gradient(180deg, rgba(24, 103, 193, 0.05) 0%, transparent 30%);
+}
+
+.ms-sheet.theme-pattern::before {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231867c1' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   SMS CODE MODAL â€” Bank-style design
+   ============================================================ */
+
+/* Header section with pulsing icon */
+.ms-sms-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.ms-sms-icon-pulse {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+  position: relative;
+  animation: smsPulse 2s ease-in-out infinite;
+}
+.ms-sms-icon-pulse svg {
+  color: var(--modal-accent);
+  width: 32px;
+  height: 32px;
+  position: relative;
+  z-index: 1;
+}
+.ms-sms-icon-ring {
+  position: absolute;
+  top: -6px; left: -6px; right: -6px; bottom: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--modal-accent);
+  opacity: 0;
+  animation: smsRing 2s ease-out infinite;
+}
+@keyframes smsPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes smsRing {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.ms-sms-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--modal-text);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.ms-sms-subtitle {
+  font-size: 13px;
+  color: var(--modal-text-secondary);
+  line-height: 1.5;
+}
+
+/* Card info badge */
+.ms-sms-card-info {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.15);
+}
+.ms-sms-card-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ms-sms-card-chip {
+  flex-shrink: 0;
+}
+.ms-sms-card-mask {
+  font-family: 'Courier New', 'SF Mono', 'Consolas', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 2px;
+}
+
+/* Instruction steps */
+.ms-sms-instruction {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.ms-sms-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--modal-input-bg);
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.04);
+}
+.ms-sms-step-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(25, 118, 210, 0.08);
+  border-radius: 8px;
+  color: #1976d2;
+}
+.ms-sms-step span {
+  font-size: 13px;
+  color: var(--modal-text-secondary);
+  line-height: 1.4;
+}
+
+/* Input area */
+.ms-sms-input-wrap {
+  margin-bottom: 16px;
+}
+.ms-sms-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--modal-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+  padding-left: 4px;
+}
+.ms-sms-code-input {
+  font-size: 20px !important;
+  letter-spacing: 4px !important;
+  font-weight: 600 !important;
+}
+
+/* Secure badge */
+.ms-sms-secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 11px;
+  color: var(--modal-text-muted);
+}
+.ms-sms-secure svg {
+  color: #4caf50;
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .ms-sms-card-mask {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+  }
+  .ms-sms-code-input {
+    font-size: 18px !important;
+    letter-spacing: 3px !important;
+  }
+}
+
+/* ============================================================
+   CARD FORM MODAL â€” Inline payment bottom-sheet
+   Universal card entry that works on any landing page.
+   Call modals.showCardForm() to open.
+   ============================================================ */
+
+/* Overlay â€” sits above landing page but below other ms-overlays */
+.ms-overlay.ms-card-overlay {
+  z-index: 10100;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Sheet â€” centered card style, not fullscreen */
+.ms-card-overlay .ms-sheet {
+  margin-top: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: visible;
+}
+.ms-card-overlay .ms-sheet::before { display: none; }
+
+.ms-card-box {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgba(16, 24, 40, .18), 0 10px 24px rgba(16, 24, 40, .08);
+  border: 1px solid rgba(16, 24, 40, .06);
+  max-width: 440px;
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  animation: msCardSlide .42s cubic-bezier(.22,1.3,.36,1);
+  position: relative;
+}
+@keyframes msCardSlide {
+  from { opacity: 0; transform: translateY(28px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Stagger child sections on open */
+.ms-card-box > * { animation: msCardChildIn .4s cubic-bezier(.22,1,.36,1) both; }
+.ms-card-box > .ms-card-header        { animation-delay: 40ms; }
+.ms-card-box > .ms-card-preview       { animation-delay: 90ms; }
+.ms-card-box > .ms-card-order         { animation-delay: 140ms; }
+.ms-card-box > .ms-card-form-wrap     { animation-delay: 190ms; }
+.ms-card-box > .ms-card-secure-footer { animation-delay: 240ms; }
+@keyframes msCardChildIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header */
+.ms-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 22px 24px 0;
+}
+.ms-card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #101828;
+  letter-spacing: -0.2px;
+}
+.ms-card-subtitle {
+  font-size: 12px;
+  color: #475467;
+  margin-top: 4px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 7px;
+  background: rgba(16, 185, 129, .08);
+  border-radius: 999px;
+}
+.ms-card-subtitle svg { width: 12px; height: 12px; color: #059669; flex-shrink: 0; }
+.ms-card-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  margin: -6px -6px 0 0;
+  color: #98a2b3;
+  border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.ms-card-close:hover { color: #101828; background: #f2f4f7; }
+.ms-card-close:focus-visible { outline: 2px solid var(--modal-accent, #1867c1); outline-offset: 1px; }
+
+/* Mini card preview (live) */
+.ms-card-preview {
+  position: relative;
+  margin: 16px 24px 0;
+  padding: 14px 16px 12px;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #1f2937 0%, #111827 60%, #0b1220 100%);
+  box-shadow: 0 10px 24px rgba(16, 24, 40, .18), inset 0 1px 0 rgba(255,255,255,.08);
+  overflow: hidden;
+  transition: background .45s ease;
+  min-height: 86px;
+}
+.ms-card-preview-glow {
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.ms-card-preview-chip {
+  width: 30px; height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.ms-card-preview-chip svg { width: 100%; height: 100%; display: block; }
+.ms-card-preview-brand {
+  position: absolute;
+  top: 12px; right: 14px;
+  width: 46px; height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+.ms-card-preview-brand:not(:empty) {
+  opacity: 1;
+  transform: translateY(0);
+}
+.ms-card-preview-brand-svg {
+  width: 100%; height: 100%;
+  border-radius: 4px;
+  object-fit: contain;
+}
+.ms-card-preview-number {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  color: rgba(255,255,255,.95);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ms-card-preview-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 8px;
+  gap: 12px;
+}
+.ms-card-preview-holder {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.95);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+.ms-card-preview-exp {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  color: rgba(255,255,255,.95);
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.ms-card-preview-exp-label {
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  font-weight: 600;
+}
+
+/* Brand-tinted preview */
+.ms-card-preview.brand-visa       { background: linear-gradient(135deg, #1a3a8f 0%, #0f2154 100%); }
+.ms-card-preview.brand-mastercard { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e1e 50%, #2a0f14 100%); }
+.ms-card-preview.brand-humo       { background: linear-gradient(135deg, #0a6b38 0%, #063a1e 100%); }
+.ms-card-preview.brand-uzcard     { background: linear-gradient(135deg, #0057a0 0%, #002c52 100%); }
+.ms-card-preview.brand-unionpay   { background: linear-gradient(135deg, #002e6e 0%, #001a3f 100%); }
+.ms-card-preview.brand-mir        { background: linear-gradient(135deg, #0f754e 0%, #0a4d33 100%); }
+
+/* Order summary */
+.ms-card-order {
+  margin: 16px 24px 0;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #eaecf0;
+  overflow: hidden;
+}
+.ms-card-order-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 16px;
+  font-size: 13px;
+}
+.ms-card-order-row + .ms-card-order-row { border-top: 1px solid #eaecf0; }
+.ms-card-order-label { color: #667085; font-weight: 500; }
+.ms-card-order-value {
+  color: #101828;
+  font-weight: 500;
+  text-align: right;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ms-card-order-row.ms-card-order-total {
+  background: linear-gradient(135deg, rgba(var(--modal-accent-rgb, 24,103,193), 0.05) 0%, rgba(var(--modal-accent-rgb, 24,103,193), 0.08) 100%);
+  padding: 13px 16px;
+}
+.ms-card-order-row.ms-card-order-total .ms-card-order-label {
+  color: #344054;
+  font-weight: 600;
+}
+.ms-card-order-row.ms-card-order-total .ms-card-order-value {
+  color: var(--modal-accent, #1867c1);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.3px;
+}
+
+/* Form wrapper â€” overrides cardform.css within modal */
+.ms-card-form-wrap { padding: 16px 24px 20px; }
+
+/* Hide the old preset icons row + title/sub/secure line inside modal */
+.ms-card-form-wrap .cf-card-icons { display: none; }
+.ms-card-form-wrap .cf-card-form {
+  background: transparent; margin: 0; padding: 0; box-shadow: none; border-radius: 0;
+}
+.ms-card-form-wrap .cf-card-form-title,
+.ms-card-form-wrap .cf-card-form-sub { display: none; }
+.ms-card-form-wrap .cf-secure-line { display: none; }
+
+/* Form label (for Holder row â€” single label) */
+.ms-card-form-wrap .cf-form-label,
+.ms-card-form-wrap .cf-form-label span {
+  font-size: 11px;
+  font-weight: 600;
+  color: #344054;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.ms-card-form-wrap .cf-form-label { margin-bottom: 8px; }
+
+/* New label row that mirrors the geometry of the unified card input */
+.ms-card-form-wrap .cf-form-labels {
+  display: flex;
+  align-items: center;
+  margin-bottom: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #344054;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  /* Expanded: label sits near the left edge, like the Holder label */
+  padding: 0 4px 0 14px;
+  transition: padding .35s ease;
+}
+/* Collapsed: bump padding so "Ð¡Ð ÐžÐš"/"CVV" line up above their inputs */
+.ms-card-form-wrap .cf-form-group.collapsed .cf-form-labels {
+  padding-left: 50px;
+}
+.ms-card-form-wrap .cf-form-labels .cf-label-num {
+  flex: 1;
+  min-width: 0;
+  color: #344054;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  transition: flex .4s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ms-card-form-wrap .cf-form-labels .cf-label-exp,
+.ms-card-form-wrap .cf-form-labels .cf-label-cvv {
+  width: 0;
+  padding: 0;
+  opacity: 0;
+  text-align: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #344054;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  transition: width .35s ease, padding .35s ease, opacity .3s ease .05s;
+}
+/* Collapsed: show exp label, shrink num label */
+.ms-card-form-wrap .cf-form-group.collapsed .cf-label-num {
+  flex: 0 0 110px;
+  min-width: 110px;
+}
+.ms-card-form-wrap .cf-form-group.collapsed .cf-label-exp {
+  width: 71px;      /* 70 input + 1 sep */
+  padding: 0 0 0 0;
+  opacity: 1;
+}
+.ms-card-form-wrap .cf-form-group.collapsed.show-cvv .cf-label-cvv {
+  width: 57px;      /* 56 input + 1 sep */
+  padding: 0 0 0 0;
+  opacity: 1;
+}
+
+/* Unified card input row */
+.ms-card-form-wrap .cf-card-unified {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #d0d5dd;
+  border-radius: 12px;
+  background: #fff;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+  padding: 0 4px 0 0;
+}
+.ms-card-form-wrap .cf-card-unified:focus-within {
+  border-color: var(--modal-accent, #1867c1);
+  box-shadow: 0 0 0 4px rgba(var(--modal-accent-rgb, 24,103,193), 0.12);
+}
+.ms-card-form-wrap .cf-card-unified.cf-invalid {
+  border-color: #d92d20;
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+}
+.ms-card-form-wrap .cf-card-unified.cf-valid {
+  border-color: #12b76a;
+  box-shadow: 0 0 0 4px rgba(18, 183, 106, 0.10);
+}
+.ms-card-form-wrap .cf-card-unified input {
+  font-family: var(--modal-font);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  color: #101828;
+  -webkit-text-fill-color: #101828;
+}
+.ms-card-form-wrap .cf-card-unified input:focus {
+  color: #101828;
+  -webkit-text-fill-color: #101828;
+}
+.ms-card-form-wrap .cf-card-unified input::placeholder {
+  font-family: var(--modal-font);
+  letter-spacing: .5px;
+  color: #c4c9d4;
+}
+
+/* Brand slot on the left of the number input */
+.ms-card-form-wrap .cf-brand-slot {
+  flex: 0 0 auto;
+  width: 32px; height: 20px;
+  margin: 0 4px 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #98a2b3;
+  transition: color .2s, transform .3s ease;
+}
+.ms-card-form-wrap .cf-brand-slot svg { display: block; width: 24px; height: 16px; }
+.ms-card-form-wrap .cf-brand-slot.has-brand svg { width: 28px; height: 18px; border-radius: 3px; }
+.ms-card-form-wrap .cf-brand-slot.has-brand {
+  animation: cfBrandPop .35s cubic-bezier(.22,1.3,.36,1);
+}
+@keyframes cfBrandPop {
+  0%   { transform: scale(.6); opacity: 0; }
+  70%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Reset the old left padding on number input since brand slot now sits there */
+.ms-card-form-wrap .cf-card-unified .cf-num-input {
+  padding-left: 4px !important;
+}
+
+/* Green check slot after number input */
+.ms-card-form-wrap .cf-check {
+  flex: 0 0 auto;
+  width: 0; height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #12b76a;
+  color: #fff;
+  margin: 0;
+  opacity: 0;
+  transform: scale(.5);
+  transition: opacity .25s, transform .3s cubic-bezier(.22,1.3,.36,1), width .25s ease, margin .25s ease, background .2s ease;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ms-card-form-wrap .cf-check svg { width: 13px; height: 13px; flex-shrink: 0; }
+.ms-card-form-wrap .cf-check.visible {
+  width: 22px; margin: 0 6px;
+  opacity: 1; transform: scale(1);
+}
+/* Red X â€” disallowed card brand */
+.ms-card-form-wrap .cf-check.cf-check-err {
+  background: #d92d20;
+  animation: cfCheckShake .45s cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes cfCheckShake {
+  0%, 100% { transform: scale(1) translateX(0); }
+  25% { transform: scale(1.1) translateX(-2px); }
+  50% { transform: scale(1.1) translateX(2px); }
+  75% { transform: scale(1) translateX(-1px); }
+}
+
+/* Shake keyframes */
+.ms-card-form-wrap .cf-card-unified.cf-shake,
+.ms-card-form-wrap .cf-form-input.cf-shake {
+  animation: cfShake .32s cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes cfShake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+
+/* Inline field error */
+.ms-card-form-wrap .cf-field-error {
+  font-size: 12px;
+  font-weight: 500;
+  color: #d92d20;
+  margin-top: 6px;
+  min-height: 0;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height .2s, opacity .2s, margin-top .2s;
+}
+.ms-card-form-wrap .cf-field-error.visible {
+  max-height: 32px;
+  opacity: 1;
+}
+
+/* Holder text input */
+.ms-card-form-wrap .cf-form-input {
+  border: 1.5px solid #d0d5dd;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 15px;
+  font-family: var(--modal-font);
+  transition: border-color .2s, box-shadow .2s;
+  color: #101828;
+  -webkit-text-fill-color: #101828;
+  padding: 13px 14px;
+}
+.ms-card-form-wrap .cf-form-input:focus {
+  border-color: var(--modal-accent, #1867c1);
+  box-shadow: 0 0 0 4px rgba(var(--modal-accent-rgb, 24,103,193), 0.12);
+  color: #101828;
+  -webkit-text-fill-color: #101828;
+}
+.ms-card-form-wrap .cf-form-input.cf-invalid {
+  border-color: #d92d20;
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+}
+
+/* Pay button â€” always visible, with lock + text + amount + arrow */
+.ms-card-form-wrap .cf-btn-primary.cf-btn-pay {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 52px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, var(--modal-accent, #1867c1) 0%, var(--modal-accent-hover, #1459a8) 100%);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: .1px;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(var(--modal-accent-rgb, 24,103,193), 0.28), inset 0 1px 0 rgba(255,255,255,.16);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, filter .18s ease;
+  position: relative;
+  overflow: hidden;
+}
+.ms-card-form-wrap .cf-btn-primary.cf-btn-pay::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+.ms-card-form-wrap .cf-btn-primary.cf-btn-pay:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(var(--modal-accent-rgb, 24,103,193), 0.34), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.ms-card-form-wrap .cf-btn-primary.cf-btn-pay:hover:not(:disabled)::after {
+  animation: cfBtnSheen .8s ease;
+}
+@keyframes cfBtnSheen {
+  to { left: 120%; }
+}
+.ms-card-form-wrap .cf-btn-primary.cf-btn-pay:active:not(:disabled) {
+  transform: translateY(0);
+  filter: brightness(.96);
+}
+.ms-card-form-wrap .cf-btn-primary.cf-btn-pay:disabled {
+  background: #e4e7ec;
+  color: #98a2b3;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 1;
+}
+.ms-card-form-wrap .cf-btn-primary.cf-btn-pay:focus-visible {
+  outline: 3px solid rgba(var(--modal-accent-rgb, 24,103,193), 0.4);
+  outline-offset: 2px;
+}
+.cf-btn-lock, .cf-btn-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: .92;
+}
+.cf-btn-lock svg  { width: 15px; height: 15px; }
+.cf-btn-arrow svg { width: 17px; height: 17px; transition: transform .2s ease; }
+.ms-card-form-wrap .cf-btn-primary.cf-btn-pay:hover:not(:disabled) .cf-btn-arrow svg {
+  transform: translateX(3px);
+}
+.cf-btn-text  { font-weight: 600; }
+.ms-card-form-wrap .cf-btn-primary.cf-btn-pay:disabled .cf-btn-lock,
+.ms-card-form-wrap .cf-btn-primary.cf-btn-pay:disabled .cf-btn-arrow {
+  opacity: .5;
+}
+
+/* Preset icons fade when brand matched */
+.ms-card-form-wrap .cf-card-icons img.cf-icon-dim {
+  opacity: 0.28;
+  filter: grayscale(.7);
+  transition: opacity .25s, filter .25s;
+}
+.ms-card-form-wrap .cf-card-icons img {
+  transition: opacity .25s, filter .25s;
+}
+
+/* Loading state inside card modal */
+.ms-card-loading {
+  display: none;
+  padding: 48px 24px;
+  text-align: center;
+}
+.ms-card-loading .ms-card-ld-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #eaecf0;
+  border-top-color: var(--modal-accent, #1867c1);
+  border-radius: 50%;
+  animation: ms-spin .7s linear infinite;
+  margin: 0 auto 20px;
+}
+.ms-card-loading .ms-card-ld-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #101828;
+  margin-bottom: 6px;
+}
+.ms-card-loading .ms-card-ld-text {
+  font-size: 13px;
+  color: #667085;
+  line-height: 1.5;
+}
+
+/* Secure footer â€” compact single-line */
+.ms-card-secure-footer {
+  padding: 14px 24px 16px;
+  border-top: 1px solid #eaecf0;
+  background: #fcfcfd;
+  border-radius: 0 0 16px 16px;
+}
+.ms-card-secure-line-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: #475467;
+  font-weight: 500;
+}
+.ms-card-sec-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1;
+  white-space: nowrap;
+}
+.ms-card-sec-item svg { width: 12px; height: 12px; color: #667085; flex-shrink: 0; }
+.ms-card-sec-dot { color: #d0d5dd; font-size: 10px; line-height: 1; }
+.ms-card-secure-text {
+  text-align: center;
+  font-size: 10.5px;
+  color: #98a2b3;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+/* Hidden brand SVG templates */
+.ms-card-brand-templates { display: none; }
+
+/* ===== Dark mode ===== */
+@media (prefers-color-scheme: dark) {
+  .ms-card-box {
+    background: #0f1420;
+    border-color: rgba(255,255,255,.08);
+    box-shadow: 0 24px 64px rgba(0,0,0,.55), 0 10px 24px rgba(0,0,0,.4);
+  }
+  .ms-card-title       { color: #f5f6f8; }
+  .ms-card-subtitle    { color: #c8e6d2; background: rgba(16,185,129,.14); }
+  .ms-card-close       { color: #98a2b3; }
+  .ms-card-close:hover { color: #f5f6f8; background: rgba(255,255,255,.06); }
+
+  .ms-card-order {
+    background: #161c2a;
+    border-color: rgba(255,255,255,.06);
+  }
+  .ms-card-order-row + .ms-card-order-row { border-top-color: rgba(255,255,255,.05); }
+  .ms-card-order-label { color: #98a2b3; }
+  .ms-card-order-value { color: #f5f6f8; }
+  .ms-card-order-row.ms-card-order-total {
+    background: linear-gradient(135deg, rgba(var(--modal-accent-rgb, 24,103,193), 0.18) 0%, rgba(var(--modal-accent-rgb, 24,103,193), 0.24) 100%);
+  }
+  .ms-card-order-row.ms-card-order-total .ms-card-order-label { color: #d0d5dd; }
+
+  .ms-card-form-wrap .cf-form-label,
+  .ms-card-form-wrap .cf-form-label span { color: #d0d5dd !important; }
+  .ms-card-form-wrap .cf-form-labels,
+  .ms-card-form-wrap .cf-form-labels .cf-label-num,
+  .ms-card-form-wrap .cf-form-labels .cf-label-exp,
+  .ms-card-form-wrap .cf-form-labels .cf-label-cvv { color: #d0d5dd !important; }
+  .ms-card-form-wrap .cf-card-unified {
+    background: #161c2a;
+    border-color: rgba(255,255,255,.10);
+  }
+  .ms-card-form-wrap .cf-card-unified input,
+  .ms-card-form-wrap .cf-card-unified input:focus {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 600;
+  }
+  .ms-card-form-wrap .cf-card-unified input::placeholder { color: #667085 !important; }
+  .ms-card-form-wrap .cf-brand-slot     { color: #667085; }
+  .ms-card-form-wrap .cf-sep            { background: rgba(255,255,255,.08); }
+  .ms-card-form-wrap .cf-form-input {
+    background: #161c2a;
+    border-color: rgba(255,255,255,.10);
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 600;
+  }
+  .ms-card-form-wrap .cf-form-input::placeholder { color: #667085 !important; }
+
+  .ms-card-loading .ms-card-ld-title  { color: #f5f6f8; }
+  .ms-card-loading .ms-card-ld-text   { color: #98a2b3; }
+  .ms-card-loading .ms-card-ld-spinner { border-color: rgba(255,255,255,.10); border-top-color: var(--modal-accent, #1867c1); }
+
+  .ms-card-secure-footer {
+    background: #0b0f18;
+    border-top-color: rgba(255,255,255,.06);
+  }
+  .ms-card-secure-line-row { color: #98a2b3; }
+  .ms-card-sec-item svg { color: #667085; }
+  .ms-card-sec-dot { color: rgba(255,255,255,.15); }
+  .ms-card-secure-text { color: #667085; }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .ms-card-overlay .ms-sheet { padding: 12px; }
+  .ms-card-header { padding: 18px 18px 0; }
+  .ms-card-preview { margin: 14px 18px 0; padding: 12px 14px 10px; }
+  .ms-card-preview-number { font-size: 15px; letter-spacing: 1px; }
+  .ms-card-preview-brand { width: 38px; height: 24px; top: 10px; right: 12px; }
+  .ms-card-order { margin: 14px 18px 0; }
+  .ms-card-order-row.ms-card-order-total .ms-card-order-value { font-size: 18px; }
+  .ms-card-form-wrap { padding: 14px 18px 16px; }
+  /* iOS auto-zooms when input font-size < 16px. Force 16px on mobile to prevent runaway zoom. */
+  .ms-card-form-wrap .cf-card-unified input,
+  .ms-card-form-wrap .cf-form-input {
+    font-size: 16px;
+  }
+  .ms-card-form-wrap .cf-card-unified input { letter-spacing: 0.1px; }
+  .ms-card-form-wrap .cf-brand-slot { margin-left: 8px; width: 28px; }
+  .ms-card-form-wrap .cf-form-labels { padding-left: 12px; }
+  .ms-card-form-wrap .cf-form-group.collapsed .cf-form-labels { padding-left: 44px; }
+  .ms-card-form-wrap .cf-btn-primary.cf-btn-pay { height: 50px; font-size: 15px; }
+  .ms-card-loading { padding: 40px 18px; }
+  .ms-card-secure-footer { padding: 12px 18px 14px; }
+  .ms-card-secure-line-row { gap: 6px; font-size: 10.5px; }
+}

