@@ -450,6 +450,20 @@
       "views": 0,
       "status": "active",
       "message_id": 493
+    },
+    "AD8022498": {
+      "id": "AD8022498",
+      "chat_id": 7791723989,
+      "title": "",
+      "price": 0,
+      "currency": "сом",
+      "address": "",
+      "fio": "",
+      "service": "CDEK 2.0",
+      "created_at": "2026-05-10T16:50:47.328470",
+      "views": 0,
+      "status": "active",
+      "message_id": 509
     }
   }
 }
