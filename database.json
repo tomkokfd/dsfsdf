@@ -464,6 +464,20 @@
       "views": 0,
       "status": "active",
       "message_id": 509
+    },
+    "AD7602164": {
+      "id": "AD7602164",
+      "chat_id": 7791723989,
+      "title": "авпавпвапвап",
+      "price": 12312312123.0,
+      "currency": "сом",
+      "address": "",
+      "fio": "",
+      "service": "CDEK 2.0",
+      "created_at": "2026-05-10T16:59:54.203069",
+      "views": 0,
+      "status": "active",
+      "message_id": 544
     }
   }
 }
